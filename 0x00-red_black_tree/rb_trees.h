@@ -40,6 +40,10 @@ rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
 int rb_tree_is_valid(const rb_tree_t *tree);
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);
 rb_tree_t *array_to_rb_tree(int *array, size_t size);
+rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);
+
+rb_tree_t *rb_tree_remove_r(rb_tree_t *root, int n, int *done);
+rb_tree_t *rb_rebalance(rb_tree_t *root, int direction, int *done);
 
 rb_tree_t *rb_tree_insert_r(rb_tree_t *root, rb_tree_t *node);
 rb_tree_t *correct_red_violation(rb_tree_t *root, int direction);
