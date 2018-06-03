@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define IS_RED(node)	(node != NULL && node->color == RED)
+
 /**
  * enum rb_color_e - Possible color of a Red-Black tree
  *
@@ -36,6 +38,18 @@ typedef struct rb_tree_s
 	struct rb_tree_s *right;
 } rb_tree_t;
 
+/**
+ * struct rb_insert_ret_s - Reb-Black tree insert return value
+ *
+ * @node: node inserted
+ * @root: root of currently recursed subtree
+ */
+typedef struct rb_insert_ret_s
+{
+	rb_tree_t *node;
+	rb_tree_t *root;
+} rb_insert_ret_t;
+
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
 int rb_tree_is_valid(const rb_tree_t *tree);
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);
@@ -43,7 +57,10 @@ rb_tree_t *array_to_rb_tree(int *array, size_t size);
 rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);
 
 rb_tree_t *rb_tree_remove_r(rb_tree_t *root, int n, int *done);
+int remove_recurse_direction_helper(rb_tree_t *root, int n, int *done);
 rb_tree_t *rb_rebalance(rb_tree_t *root, int direction, int *done);
+void rebalance_red_siblings(
+	int direction, rb_tree_t *p, rb_tree_t *s, rb_tree_t *root, int *done);
 
 rb_tree_t *rb_tree_insert_r(rb_tree_t *root, rb_tree_t *node);
 rb_tree_t *correct_red_violation(rb_tree_t *root, int direction);
