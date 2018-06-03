@@ -1,5 +1,10 @@
 #include "rb_trees.h"
 
+#define IS_RED(node)	(node != NULL && node->color == RED)
+
+void repair_red_violation(
+	rb_tree_t *q, rb_tree_t *p, rb_tree_t *t, rb_tree_t *g, int last);
+
 /**
  * rb_tree_insert - insert a node into an RB tree using a topdown approach
  *
@@ -64,9 +69,7 @@ rb_tree_t *rb_tree_insert(rb_tree_t **tree, int n)
 				q->right->color = BLACK;
 			}
 
-			/* Fix red violation */
 			repair_red_violation(q, p, t, g, last);
-
 
 			/* Stop if found */
 			if (q && q->n == n)
