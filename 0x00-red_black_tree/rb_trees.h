@@ -67,7 +67,9 @@ void rebalance_red_siblings(
 
 rb_tree_t *rb_tree_insert_r(rb_tree_t *root, rb_tree_t *node);
 rb_tree_t *correct_red_violation(rb_tree_t *root, int direction);
-rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap);
+rb_tree_t *single_rotate_color_swap(
+	rb_tree_t *root, int direction, int color_swap);
+rb_tree_t *single_rotate(rb_tree_t *root, int direction);
 rb_tree_t *double_rotate(rb_tree_t *root, int direction);
 int is_red(rb_tree_t *node);
 

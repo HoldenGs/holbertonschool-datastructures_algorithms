@@ -121,9 +121,9 @@ void repair_red_violation(
 			if (q == p->right)
 			{
 				if (dir2)
-					t->right = single_rotate(g, !last, COLOR_SWAP);
+					t->right = single_rotate_color_swap(g, !last, COLOR_SWAP);
 				else
-					t->left = single_rotate(g, !last, COLOR_SWAP);
+					t->left = single_rotate_color_swap(g, !last, COLOR_SWAP);
 			}
 			else
 			{
@@ -138,9 +138,9 @@ void repair_red_violation(
 			if (q == p->left)
 			{
 				if (dir2)
-					t->right = single_rotate(g, !last, COLOR_SWAP);
+					t->right = single_rotate_color_swap(g, !last, COLOR_SWAP);
 				else
-					t->left = single_rotate(g, !last, COLOR_SWAP);
+					t->left = single_rotate_color_swap(g, !last, COLOR_SWAP);
 			}
 			else
 			{
@@ -164,7 +164,8 @@ void repair_red_violation(
  *
  * Return: the new root after rotation
  */
-rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
+rb_tree_t *single_rotate_color_swap(
+	rb_tree_t *root, int direction, int color_swap)
 {
 	rb_tree_t *tmp;
 
@@ -206,9 +207,9 @@ rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
 rb_tree_t *double_rotate(rb_tree_t *root, int direction)
 {
 	if (direction)
-		root->left = single_rotate(root->left, !direction, NO_COLOR_SWAP);
+		root->left = single_rotate_color_swap(root->left, !direction, NO_COLOR_SWAP);
 	else
-		root->right = single_rotate(root->right, !direction, NO_COLOR_SWAP);
-	return (single_rotate(root, direction, COLOR_SWAP));
+		root->right = single_rotate_color_swap(root->right, !direction, NO_COLOR_SWAP);
+	return (single_rotate_color_swap(root, direction, COLOR_SWAP));
 }
 
