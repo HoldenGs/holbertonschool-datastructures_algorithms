@@ -207,9 +207,11 @@ rb_tree_t *single_rotate_color_swap(
 rb_tree_t *double_rotate(rb_tree_t *root, int direction)
 {
 	if (direction)
-		root->left = single_rotate_color_swap(root->left, !direction, NO_COLOR_SWAP);
+		root->left = single_rotate_color_swap(
+			root->left, !direction, NO_COLOR_SWAP);
 	else
-		root->right = single_rotate_color_swap(root->right, !direction, NO_COLOR_SWAP);
+		root->right = single_rotate_color_swap(
+			root->right, !direction, NO_COLOR_SWAP);
 	return (single_rotate_color_swap(root, direction, COLOR_SWAP));
 }
 
