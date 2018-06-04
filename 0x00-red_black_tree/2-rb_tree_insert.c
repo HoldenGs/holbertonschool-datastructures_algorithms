@@ -1,138 +1,169 @@
 #include "rb_trees.h"
 
+#define IS_RED(node)	(node != NULL && node->color == RED)
+
+void repair_red_violation(
+	rb_tree_t *q, rb_tree_t *p, rb_tree_t *t, rb_tree_t *g, int last);
+
 /**
- * rb_tree_insert - insert a node into an RB tree
+ * rb_tree_insert - insert a node into an RB tree using a topdown approach
  *
- * @tree: RB tree
- * @value: value to insert
+ * @tree: pointer to root node of tree
+ * @n: data to insert
  *
- * Return: new node inserted into the tree
+ * Return: node inserted
  */
-rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value)
+rb_tree_t *rb_tree_insert(rb_tree_t **tree, int n)
 {
-	rb_tree_t *node, *ret;
+	rb_tree_t *ret, *root;
 
-	node = rb_tree_node(NULL, value, RED);
-	ret = rb_tree_insert_r(*tree, node);
-	if (ret != NULL)
-		*tree = ret;
+	root = *tree;
+	ret = NULL;
+	if (root == NULL)
+	{
+		/* Empty tree case */
+		root = rb_tree_node(NULL, n, BLACK);
+		*tree = root;
+		ret = root;
+
+		return (ret);
+	}
 	else
-		node = ret;
-	(*tree)->color = BLACK;
+	{
+		rb_tree_t head = { 0 }; /* False tree root */
 
-	return (node);
+		rb_tree_t *g, *t;     /* Grandparent & parent */
+		rb_tree_t *p, *q;     /* Iterator & parent */
+		int dir = 0, last;
+
+		/* Set up helpers */
+		t = &head;
+		g = p = NULL;
+		q = t->right = root;
+
+		/* Search down the tree */
+		for (;;)
+		{
+			if (q == NULL)
+			{
+				/* Insert new node at the bottom */
+				if (dir)
+				{
+					p->right = q = rb_tree_node(p, n, RED);
+					ret = p->right;
+				}
+				else
+				{
+					p->left = q = rb_tree_node(p, n, RED);
+					ret = p->left;
+				}
+
+				if (q == NULL)
+					return (q);
+			}
+			else if (IS_RED(q->left) && IS_RED(q->right))
+			{
+				/* Color flip */
+				q->color = RED;
+				q->left->color = BLACK;
+				q->right->color = BLACK;
+			}
+
+			repair_red_violation(q, p, t, g, last);
+
+			/* Stop if found */
+			if (q && q->n == n)
+				break;
+
+			last = dir;
+			dir = q->n < n;
+
+			/* Update helpers */
+			if (g != NULL)
+				t = g;
+
+			g = p, p = q;
+			if (dir)
+				q = q->right;
+			else
+				q = q->left;
+		}
+
+		/* Update root */
+		*tree = head.right;
+	}
+
+	/* Make root black */
+	root->color = BLACK;
+
+	return (ret);
 }
 
-/**
- * rb_tree_insert_r - recurse into RB tree to find point to insert at. After
- * the insertion, the recursion out of the functions checks on each recursed
- * into above the insertion point to check for a Red Violation. This is
- * the only violation we need to search for because we are always inserting
- * a red node.
- *
- * @root: root of the current subtree
- * @node: node to insert
- *
- * Return: current root node
- */
-rb_tree_t *rb_tree_insert_r(rb_tree_t *root, rb_tree_t *node)
-{
-	rb_tree_t *tmp;
-	int direction;
 
-	if (root == NULL)
-		root = node;
-	else if (node->n != root->n)
+/**
+ * repair_red_violation - fix the red violations created from inserting
+ *
+ * @q: current node
+ * @p: parent node
+ * @t: great-grandparent
+ * @g: grandparents
+ * @last: last direction
+ */
+void repair_red_violation(
+	rb_tree_t *q, rb_tree_t *p, rb_tree_t *t, rb_tree_t *g, int last)
+{
+	if (IS_RED(q) && IS_RED(p))
 	{
-		if (node->n > root->n)
+		int dir2 = t->right == g;
+
+		if (last)
 		{
-			direction = 1;
-			tmp = root->right;
-			root->right = rb_tree_insert_r(root->right, node);
-			if (root->right == NULL)
+			if (q == p->right)
 			{
-				root->right = tmp;
-				return (NULL);
+				if (dir2)
+					t->right = single_rotate(g, !last);
+				else
+					t->left = single_rotate(g, !last);
 			}
-			root = correct_red_violation(root, direction);
+			else
+			{
+				if (dir2)
+					t->right = double_rotate(g, !last);
+				else
+					t->left = double_rotate(g, !last);
+			}
 		}
 		else
 		{
-			direction = 0;
-			tmp = root->left;
-			root->left = rb_tree_insert_r(root->left, node);
-			if (root->left == NULL)
+			if (q == p->left)
 			{
-				root->left = tmp;
-				return (NULL);
+				if (dir2)
+					t->right = single_rotate(g, !last);
+				else
+					t->left = single_rotate(g, !last);
 			}
-			root = correct_red_violation(root, direction);
+			else
+			{
+				if (dir2)
+					t->right = double_rotate(g, !last);
+				else
+					t->left = double_rotate(g, !last);
+			}
 		}
 	}
-	else
-		return (NULL);
-	return (root);
 }
 
-/**
- * correct_red_violation - correct any red violation found in the subtree
- *
- * @root: root of current subtree
- * @direction: direction of tree a node was inserted in. 1 is right, 0 is
- * left
- *
- * Return: root of subtree
- */
-rb_tree_t *correct_red_violation(rb_tree_t *root, int direction)
-{
-	if (direction)
-	{
-		root->right->parent = root;
-		if (IS_RED(root->right))
-		{
-			if (IS_RED(root->left))
-			{
-				root->color = RED;
-				root->left->color = BLACK;
-				root->right->color = BLACK;
-			}
-			else if (root->right && IS_RED(root->right->right))
-				root = single_rotate(root, !direction, COLOR_SWAP);
-			else if (root->right && IS_RED(root->right->left))
-				root = double_rotate(root, !direction);
-		}
-	}
-	else
-	{
-		root->left->parent = root;
-		if (IS_RED(root->left))
-		{
-			if (IS_RED(root->right))
-			{
-				root->color = RED;
-				root->left->color = BLACK;
-				root->right->color = BLACK;
-			}
-			else if (root->left && IS_RED(root->left->left))
-				root = single_rotate(root, !direction, COLOR_SWAP);
-			else if (root->left && IS_RED(root->left->right))
-				root = double_rotate(root, !direction);
-		}
-	}
-	return (root);
-}
+
 
 /**
  * single_rotate - rotate a binary tree from a given @root
  *
  * @root: root to rotate
  * @direction: direction to rotate. 1 is right, 0 is left
- * @color_swap: if COLOR_SWAP (1) is set, swaps to color of the
- * root and new root
  *
  * Return: the new root after rotation
  */
-rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
+rb_tree_t *single_rotate(rb_tree_t *root, int direction)
 {
 	rb_tree_t *tmp;
 
@@ -152,11 +183,8 @@ rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
 		tmp->parent = root->parent;
 		root->parent = tmp;
 	}
-	if (color_swap)
-	{
-		root->color = RED;
-		tmp->color = BLACK;
-	}
+	root->color = RED;
+	tmp->color = BLACK;
 	return (tmp);
 }
 
@@ -174,20 +202,9 @@ rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
 rb_tree_t *double_rotate(rb_tree_t *root, int direction)
 {
 	if (direction)
-		root->left = single_rotate(root->left, !direction, NO_COLOR_SWAP);
+		root->left = single_rotate(root->left, !direction);
 	else
-		root->right = single_rotate(root->right, !direction, NO_COLOR_SWAP);
-	return (single_rotate(root, direction, COLOR_SWAP));
+		root->right = single_rotate(root->right, !direction);
+	return (single_rotate(root, direction));
 }
 
-/**
- * is_red - check if a node is red
- *
- * @node: node to check
- *
- * Return: 1 for red, 0 for black or another color
- */
-int is_red(rb_tree_t *node)
-{
-	return (node != NULL && node->color == RED);
-}
