@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define COLOR_SWAP		1
+#define NO_COLOR_SWAP	0
+
+#define RIGHT			1
+#define LEFT			0
+
 #define IS_RED(node)	(node != NULL && node->color == RED)
 
 /**
@@ -62,10 +68,13 @@ rb_tree_t *rb_rebalance(rb_tree_t *root, int direction, int *done);
 void rebalance_red_siblings(
 	int direction, rb_tree_t *p, rb_tree_t *s, rb_tree_t *root, int *done);
 
+
+
+
+void rebalance(rb_tree_t *parent, rb_tree_t *root, int insert_direction);
 rb_tree_t *rb_tree_insert_r(rb_tree_t *root, rb_tree_t *node);
+rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap);
 rb_tree_t *correct_red_violation(rb_tree_t *root, int direction);
-rb_tree_t *single_rotate(rb_tree_t *root, int direction);
 rb_tree_t *double_rotate(rb_tree_t *root, int direction);
-int is_red(rb_tree_t *node);
 
 #endif /* _RB_TREES_H_ */
