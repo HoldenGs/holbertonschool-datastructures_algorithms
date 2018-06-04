@@ -160,6 +160,7 @@ void repair_red_violation(
  *
  * @root: root to rotate
  * @direction: direction to rotate. 1 is right, 0 is left
+ * @color_swap: if COLOR_SWAP (1) is set, swap the root and new root colors
  *
  * Return: the new root after rotation
  */
@@ -183,8 +184,11 @@ rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
 		tmp->parent = root->parent;
 		root->parent = tmp;
 	}
-	root->color = RED;
-	tmp->color = BLACK;
+	if (color_swap)
+	{
+		root->color = RED;
+		tmp->color = BLACK;		
+	}
 	return (tmp);
 }
 

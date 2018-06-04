@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define COLOR_SWAP		1
+#define NO_COLOR_SWAP	0
+
 #define IS_RED(node)	(node != NULL && node->color == RED)
 
 /**
