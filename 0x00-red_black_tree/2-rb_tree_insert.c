@@ -187,7 +187,7 @@ rb_tree_t *single_rotate(rb_tree_t *root, int direction, int color_swap)
 	if (color_swap)
 	{
 		root->color = RED;
-		tmp->color = BLACK;		
+		tmp->color = BLACK;
 	}
 	return (tmp);
 }
