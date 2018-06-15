@@ -69,5 +69,6 @@ typedef struct graph_s
 
 /* Prototypes */
 graph_t *graph_create(void);
+vertex_t *graph_add_vertex(graph_t *graph, const char *str);
 
 #endif /* _GRAPHS_H_ */
