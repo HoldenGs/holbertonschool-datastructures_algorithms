@@ -3,6 +3,7 @@
 #define _GRAPHS_H_
 
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * enum edge_type_e - Enumerates the different types of
@@ -70,5 +71,12 @@ typedef struct graph_s
 /* Prototypes */
 graph_t *graph_create(void);
 vertex_t *graph_add_vertex(graph_t *graph, const char *str);
+
+/* Add edge prototypes */
+int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_t type);
+vertex_t *find_vertex(graph_t *graph, const char *content);
+int add_edge(vertex_t *src, vertex_t *dest);
+
+void graph_delete(graph_t *graph);
 
 #endif /* _GRAPHS_H_ */
