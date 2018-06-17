@@ -18,6 +18,20 @@ typedef enum edge_type_e
     BIDIRECTIONAL
 } edge_type_t;
 
+/**
+ * visited_type_e - Enumerates the different types of
+ * colors determining whether a vertex was visited or not
+ *
+ * @WHITE: An unvisited vertex
+ * @GREY: A visited vertex with unvisited edges
+ * @BLACK: A visited vertex with all edges visited
+ */
+typedef enum visited_type_e
+{
+    WHITE = 0,
+    BLACK
+} visited_type_t;
+
 /* Define the structure temporarily for usage in the edge_t */
 typedef struct vertex_s vertex_t;
 
@@ -68,15 +82,52 @@ typedef struct graph_s
     vertex_t    *vertices;
 } graph_t;
 
+/**
+ * struct vlist_s - linked list for queue struct
+ *
+ * @next: next linked list node
+ * @prev: previous linked list node
+ * @vertex: vertex stored in node
+ */
+typedef struct vlist_s
+{
+    struct vlist_s *next;
+    struct vlist_s *prev;
+    vertex_t *vertex;
+    size_t depth;
+} vlist_t;
+
+/**
+ * struct queue_s - queue struct for vertexes
+ *
+ * @head: head of queue to push onto
+ * @tail: tail of queue to pop from
+ */
+typedef struct queue_s
+{
+    vlist_t *head;
+    vlist_t *tail;
+} queue_t;
+
 /* Prototypes */
 graph_t *graph_create(void);
 vertex_t *graph_add_vertex(graph_t *graph, const char *str);
+void graph_delete(graph_t *graph);
 
 /* Add edge prototypes */
 int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_t type);
 vertex_t *find_vertex(graph_t *graph, const char *content);
 int add_edge(vertex_t *src, vertex_t *dest);
+int add_two_edges(vertex_t *src, vertex_t *dest);
 
-void graph_delete(graph_t *graph);
+/* Depth-first-traversal prototypes */
+size_t depth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *v, size_t depth));
+size_t depth_first_traverse_r(vertex_t *vertex, void (*action)(const vertex_t *v, size_t depth), visited_type_t visited[], size_t depth);
+
+/* Breadth-first-traversal prototypes */
+size_t breadth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *v, size_t depth));
+vlist_t *push(queue_t *queue, vertex_t *vertex, size_t depth);
+vlist_t *pop(queue_t *queue);
+
 
 #endif /* _GRAPHS_H_ */

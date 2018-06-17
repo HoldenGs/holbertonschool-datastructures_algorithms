@@ -13,7 +13,7 @@
 int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_t type)
 {
     vertex_t *vertex_1, *vertex_2;
-    int e_1_ret = 1, e_2_ret = 1;
+    int ret = 0;
 
     /* Find vertices */
     vertex_1 = find_vertex(graph, src);
@@ -22,18 +22,22 @@ int graph_add_edge(graph_t *graph, const char *src, const char *dest, edge_type_
         return (0);
     
     /* Add edges to vertices */
-    e_1_ret = add_edge(vertex_1, vertex_2);
-    if (e_1_ret)
-        vertex_1->nb_edges++;
-    if (type == BIDIRECTIONAL)
+    if (type == UNIDIRECTIONAL)
     {
-        e_2_ret = add_edge(vertex_2, vertex_1);
-        if (e_2_ret)
+        ret = add_edge(vertex_1, vertex_2);
+        if (ret)
+            vertex_1->nb_edges++;
+    }
+    else if (type == BIDIRECTIONAL)
+    {
+        ret = add_two_edges(vertex_1, vertex_2);
+        if (ret)
             vertex_2->nb_edges++;
-    }        
+    }
 
-    return ((!e_1_ret || !e_2_ret) ? 0 : 1);
+    return (ret);
 }
+
 
 /**
  * find_vertex - find a vertex in a graph, given it's content
@@ -90,3 +94,51 @@ int add_edge(vertex_t *src, vertex_t *dest)
 
     return (1);
 }
+
+/**
+ * add_two_edges - add an undirected edge in a graph on vertex @src and @dest
+ *
+ * @src: source vertex
+ * @dest: destination vertex
+ *
+ * Return: 1 for success, 0 for failure
+ */
+int add_two_edges(vertex_t *src, vertex_t *dest)
+{
+    edge_t *edge_1, *edge_2, *next_edge;
+
+    /* Create edge */
+    edge_1 = malloc(sizeof(edge_t));
+    edge_2 = malloc(sizeof(edge_t));
+    if (edge_2 == NULL || edge_2 == NULL)
+        return (0);
+    edge_1->dest = dest;
+    edge_2->dest = src;
+    edge_1->next = NULL;
+    edge_2->next = NULL;
+
+    /* Add edge_1 */
+    if (src->edges == NULL)
+        src->edges = edge_1;
+    else
+    {
+        next_edge = src->edges;
+        while (next_edge->next != NULL)
+            next_edge = next_edge->next;
+        next_edge->next = edge_1;
+    }
+
+    /* Add edge_1 */
+    if (dest->edges == NULL)
+        dest->edges = edge_2;
+    else
+    {
+        next_edge = dest->edges;
+        while (next_edge->next != NULL)
+            next_edge = next_edge->next;
+        next_edge->next = edge_2;
+    }
+
+    return (1);
+}
+
