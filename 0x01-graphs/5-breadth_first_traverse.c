@@ -10,7 +10,8 @@
  *
  * Return: depth of traversal
  */
-size_t breadth_first_traverse(const graph_t *graph, void (*action)(const vertex_t *v, size_t depth))
+size_t breadth_first_traverse(const graph_t *graph,
+	void (*action)(const vertex_t *v, size_t depth))
 {
 	size_t depth = 0, i, new_depth;
 	visited_type_t *visited;
@@ -101,6 +102,6 @@ vlist_t *pop(queue_t *queue)
 	queue->tail = node->prev;
 	if (queue->head == node)
 		queue->head = NULL;
-	
+
 	return (node);
 }
