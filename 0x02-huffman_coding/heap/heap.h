@@ -36,5 +36,7 @@ typedef struct heap_s
 
 /* Prototypes */
 heap_t *heap_create(int (*data_cmp)(void *, void *));
+binary_tree_node_t *binary_tree_node(binary_tree_node_t *parent, void *data);
+binary_tree_node_t *heap_insert(heap_t *heap, void *data);
 
 #endif /* _HEAP_H_ */
