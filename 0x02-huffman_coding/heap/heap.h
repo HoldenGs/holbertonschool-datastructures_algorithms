@@ -3,6 +3,7 @@
 #define _HEAP_H_
 
 #include <stdlib.h>
+#include <math.h>
 
 /**
  * struct binary_tree_node_s - Binary tree node data structure
@@ -34,9 +35,29 @@ typedef struct heap_s
 	binary_tree_node_t *root;
 } heap_t;
 
+/**
+ * struct stack_t - stack style linked list for inserting into heap
+ *
+ * @prev: previous node
+ * @next: next node
+ * @direction: direction to traverse heap
+ */
+typedef struct stack_s
+{
+	struct stack_s *prev;
+	struct stack_s *next;
+	int direction;
+} stack_t;
+
 /* Prototypes */
 heap_t *heap_create(int (*data_cmp)(void *, void *));
 binary_tree_node_t *binary_tree_node(binary_tree_node_t *parent, void *data);
+
+/* Insert Prototypes */
 binary_tree_node_t *heap_insert(heap_t *heap, void *data);
+binary_tree_node_t *insert(heap_t *heap, void *data);
+stack_t *push(stack_t **stack, int direction);
+int pop(stack_t **stack);
+binary_tree_node_t *get_parent(heap_t *heap, stack_t **stack);
 
 #endif /* _HEAP_H_ */
