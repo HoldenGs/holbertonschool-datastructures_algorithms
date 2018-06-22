@@ -3,7 +3,6 @@
 #define _HEAP_H_
 
 #include <stdlib.h>
-#include <math.h>
 
 /**
  * struct binary_tree_node_s - Binary tree node data structure
@@ -59,5 +58,7 @@ binary_tree_node_t *insert(heap_t *heap, void *data);
 stack_t *push(stack_t **stack, int direction);
 int pop(stack_t **stack);
 binary_tree_node_t *get_parent(heap_t *heap, stack_t **stack);
+int power(int n, int e);
+int logarithm2(int n);
 
 #endif /* _HEAP_H_ */

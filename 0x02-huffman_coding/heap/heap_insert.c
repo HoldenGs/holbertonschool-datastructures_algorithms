@@ -3,6 +3,45 @@
 #define RIGHT	1
 #define LEFT	0
 
+#define FLOOR(n)		(n - (n % 1))
+#define CEILING_POS(X) ((X - (int)(X)) > 0 ? (int)(X + 1) : (int)(X))
+#define CEILING_NEG(X) ((X - (int)(X)) < 0 ? (int)(X - 1) : (int)(X))
+#define CEIL(X)			(((X) > 0) ? CEILING_POS(X) : CEILING_NEG(X))
+
+
+/**
+ * power - compute @n to the power of @e
+ *
+ * @n: number
+ * @e: exponent
+ *
+ * Return: n^e
+ */
+int power(int n, int e)
+{
+	int new_n;
+
+	if (e == 0)
+		return (1);
+	new_n = power(n, e / 2);
+	if (e % 2 == 0)
+		return (new_n * new_n);
+	else
+		return (n * new_n * new_n);
+}
+
+/**
+ * logarithm2 - compute the log2 of @n
+ *
+ * @n: number to log
+ *
+ * Return: 2nd logarithm of @n
+ */
+int logarithm2(int n)
+{
+	return ((n > 1) ? 1 + logarithm2(n / 2) : 0);
+}
+
 /**
  * heap_insert - insert a node into the min binary heap, and sift up until
  * it's at the correct position relative to it's parents
@@ -60,9 +99,9 @@ binary_tree_node_t *insert(heap_t *heap, void *data)
 	double percent_in_level;
 
 	stack = NULL;
-	level = floor(log(heap->size + 1) / log(2));
-	max_nodes_in_level = pow(2, level);
-	max_nodes_in_tree = pow(2, level + 1) - 1;
+	level = FLOOR(logarithm2(heap->size + 1) / logarithm2(2));
+	max_nodes_in_level = power(2, level);
+	max_nodes_in_tree = power(2, level + 1) - 1;
 	pos_in_level = max_nodes_in_level - (max_nodes_in_tree - (heap->size + 1));
 	while (level > 0)
 	{
@@ -78,7 +117,7 @@ binary_tree_node_t *insert(heap_t *heap, void *data)
 		}
 		percent_in_level = (float)pos_in_level / (float)max_nodes_in_level;
 		max_nodes_in_level /= 2;
-		pos_in_level = ceil(percent_in_level * max_nodes_in_level);
+		pos_in_level = CEIL(percent_in_level * max_nodes_in_level);
 		level--;
 	}
 	parent = get_parent(heap, &stack);
