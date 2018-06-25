@@ -1,7 +1,5 @@
 #include "heap.h"
 
-#include <stdio.h>
-
 #define RIGHT	1
 #define LEFT	0
 
@@ -30,8 +28,11 @@ void *heap_extract(heap_t *heap)
 	data = replace(heap);
 	if (data == NULL)
 		return (NULL);
+	else
+		heap->size--;
 
 	node = heap->root;
+	left_diff = right_diff = 0;
 	while ((node->left &&
 		(left_diff = heap->data_cmp(node->data, node->left->data)) > 0) ||
 		(node->right &&
