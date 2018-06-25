@@ -28,9 +28,8 @@ void *heap_extract(heap_t *heap)
 	data = replace(heap);
 	if (data == NULL)
 		return (NULL);
-	else
-		heap->size--;
 
+	heap->size--;
 	node = heap->root;
 	left_diff = right_diff = 0;
 	while (node && ((node->left &&
