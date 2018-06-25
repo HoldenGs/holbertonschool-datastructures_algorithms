@@ -33,10 +33,10 @@ void *heap_extract(heap_t *heap)
 
 	node = heap->root;
 	left_diff = right_diff = 0;
-	while ((node->left &&
+	while (node && ((node->left &&
 		(left_diff = heap->data_cmp(node->data, node->left->data)) > 0) ||
 		(node->right &&
-		(right_diff = heap->data_cmp(node->data, node->right->data)) > 0))
+		(right_diff = heap->data_cmp(node->data, node->right->data)) > 0)))
 	{
 		if (left_diff > right_diff)
 		{
@@ -121,10 +121,17 @@ void replace_root(heap_t *heap, stack_t **stack)
 		else
 			node = node->left;
 	}
-	if (node->parent->left == node)
-		node->parent->left = NULL;
+	if (node->parent)
+	{
+		if (node->parent->left == node)
+			node->parent->left = NULL;
+		else
+			node->parent->right = NULL;
+		heap->root->data = node->data;
+	}
 	else
-		node->parent->right = NULL;
-	heap->root->data = node->data;
+	{
+		heap->root = NULL;
+	}
 	free(node);
 }
