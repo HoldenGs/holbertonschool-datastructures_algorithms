@@ -61,4 +61,9 @@ binary_tree_node_t *get_parent(heap_t *heap, stack_t **stack);
 int power(int n, int e);
 int logarithm2(int n);
 
+/* Extract Prototypes */
+void *heap_extract(heap_t *heap);
+void *replace(heap_t *heap);
+void replace_root(heap_t *heap, stack_t **stack);
+
 #endif /* _HEAP_H_ */
