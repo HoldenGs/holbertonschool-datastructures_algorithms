@@ -35,7 +35,7 @@ typedef struct heap_s
 } heap_t;
 
 /**
- * struct stack_t - stack style linked list for inserting into heap
+ * struct stack_s - stack style linked list for inserting into heap
  *
  * @prev: previous node
  * @next: next node
@@ -65,5 +65,10 @@ int logarithm2(int n);
 void *heap_extract(heap_t *heap);
 void *replace(heap_t *heap);
 void replace_root(heap_t *heap, stack_t **stack);
+
+/* Delete Prototypes */
+void heap_delete(heap_t *heap, void (*free_data)(void *));
+void delete_tree_r(binary_tree_node_t *node, void (*free_data)(void *));
+
 
 #endif /* _HEAP_H_ */
