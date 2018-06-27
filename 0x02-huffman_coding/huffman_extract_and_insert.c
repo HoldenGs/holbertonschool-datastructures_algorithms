@@ -17,6 +17,8 @@ int huffman_extract_and_insert(heap_t *priority_queue)
 
 	p1 = heap_extract(priority_queue);
 	p2 = heap_extract(priority_queue);
+	if (p1 == NULL || p2 == NULL)
+		return (0);
 	n1 = (binary_tree_node_t *)p1;
 	n2 = (binary_tree_node_t *)p2;
 	s1 = (symbol_t *)n1->data;
