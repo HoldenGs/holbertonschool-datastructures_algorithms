@@ -12,6 +12,7 @@
  */
 binary_tree_node_t *huffman_tree(char *data, size_t *freq, size_t size)
 {
+	binary_tree_node_t *root;
 	heap_t *heap;
 	int ret;
 
@@ -22,5 +23,8 @@ binary_tree_node_t *huffman_tree(char *data, size_t *freq, size_t size)
 		if (!ret)
 			return (NULL);
 	}
-	return ((binary_tree_node_t *)heap->root->data);
+	root = (binary_tree_node_t *)heap->root->data;
+	free(heap->root);
+	free(heap);
+	return (root);
 }
