@@ -22,7 +22,8 @@ int freq_cmp(void *p1, void *p2)
 }
 
 /**
- * huffman_priority_queue - huffman prio
+ * huffman_priority_queue - create a priority queue out of arrays of
+ * character data and their respective frequencies
  *
  * @data: array of character data
  * @freq: array of frequencies for each character
