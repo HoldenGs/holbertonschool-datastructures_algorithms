@@ -18,24 +18,23 @@
  */
 void *heap_extract(heap_t *heap)
 {
-	int left_diff, right_diff;
+	int left_diff = -1, right_diff = -1;
 	void *data, *tmp;
 	binary_tree_node_t *node;
 
 	if (heap == NULL || heap->root == NULL)
 		return (NULL);
-
 	data = replace(heap);
 	if (data == NULL)
 		return (NULL);
-
 	heap->size--;
 	node = heap->root;
-	left_diff = right_diff = 0;
-	while (node && ((node->left &&
-		(left_diff = heap->data_cmp(node->data, node->left->data)) > 0) ||
-		(node->right &&
-		(right_diff = heap->data_cmp(node->data, node->right->data)) > 0)))
+	if (node && node->left)
+		left_diff = heap->data_cmp(node->data, node->left->data);
+	if (node && node->right)
+		right_diff = heap->data_cmp(node->data, node->right->data);
+	while (node && ((node->left && left_diff > 0) ||
+					(node->right && right_diff > 0)))
 	{
 		if (left_diff > right_diff)
 		{
@@ -51,8 +50,11 @@ void *heap_extract(heap_t *heap)
 			node->data = tmp;
 			node = node->right;
 		}
+		if (node && node->left)
+			left_diff = heap->data_cmp(node->data, node->left->data);
+		if (node && node->right)
+			right_diff = heap->data_cmp(node->data, node->right->data);
 	}
-
 	return (data);
 }
 
