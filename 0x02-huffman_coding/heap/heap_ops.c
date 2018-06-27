@@ -58,8 +58,7 @@ stack_t *push(stack_t **stack, int direction)
 		return (NULL);
 	if (*stack != NULL)
 		(*stack)->prev = node;
-	else
-		node->prev = NULL;
+	node->prev = NULL;
 	node->next = *stack;
 	node->direction = direction;
 	*stack = node;
