@@ -31,6 +31,8 @@ int huffman_extract_and_insert(heap_t *priority_queue)
 		return (0);
 	node->left = n1;
 	node->right = n2;
+	n1->parent = node;
+	n2->parent = node;
 	if (heap_insert(priority_queue, node) == NULL)
 		return (0);
 	return (1);
