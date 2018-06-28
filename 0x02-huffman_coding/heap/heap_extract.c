@@ -34,7 +34,7 @@ void *heap_extract(heap_t *heap)
 	while (node && ((node->left && left_diff > 0) ||
 					(node->right && right_diff > 0)))
 	{
-		if (left_diff > right_diff)
+		if (left_diff >= right_diff)
 		{
 			tmp = node->left->data;
 			node->left->data = node->data;
