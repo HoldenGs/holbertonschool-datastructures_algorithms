@@ -38,7 +38,7 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
 	heap->size++;
 
 	/* Sift Up */
-	while (node->parent && heap->data_cmp(node->data, node->parent->data) <= 0)
+	while (node->parent && heap->data_cmp(node->parent->data, node->data) > 0)
 	{
 		tmp = node->data;
 		node->data = node->parent->data;
