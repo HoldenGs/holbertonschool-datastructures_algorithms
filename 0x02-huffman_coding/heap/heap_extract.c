@@ -31,10 +31,10 @@ void *heap_extract(heap_t *heap)
 		left_diff = heap->data_cmp(node->data, node->left->data);
 	if (node && node->right)
 		right_diff = heap->data_cmp(node->data, node->right->data);
-	while (node && ((node->left && left_diff > 0) ||
-					(node->right && right_diff > 0)))
+	while (node && ((node->left && left_diff >= 0) ||
+					(node->right && right_diff >= 0)))
 	{
-		if (left_diff >= right_diff)
+		if (left_diff > right_diff)
 		{
 			tmp = node->left->data;
 			node->left->data = node->data;
