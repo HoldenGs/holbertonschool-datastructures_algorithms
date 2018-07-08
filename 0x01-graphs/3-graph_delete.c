@@ -11,6 +11,9 @@ void graph_delete(graph_t *graph)
 	vertex_t *tmp_vertex;
 	edge_t *tmp_edge;
 
+	if (graph == NULL)
+		return;
+
 	while (graph->vertices != NULL)
 	{
 		while (graph->vertices->edges != NULL)
