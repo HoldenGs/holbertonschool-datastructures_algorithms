@@ -21,7 +21,7 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 		return (NULL);
 	vertex->content = strdup(str);
 	if (vertex->content == NULL)
-		return (NULL);
+			return (NULL);
 	vertex->nb_edges = 0;
 	vertex->edges = NULL;
 	vertex->next = NULL;
@@ -44,6 +44,5 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 		}
 		next_vertex->next = vertex;
 	}
-
 	return (vertex);
 }
