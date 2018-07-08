@@ -20,6 +20,8 @@ size_t breadth_first_traverse(const graph_t *graph,
 	edge_t *edge;
 	vlist_t *v_and_d;
 
+	if (graph == NULL || action == NULL)
+		return (0);
 	/* Initialize visited array to 0's */
 	visited = malloc(sizeof(visited_type_t) * graph->nb_vertices);
 	for (i = 0; i < graph->nb_vertices; i++)
