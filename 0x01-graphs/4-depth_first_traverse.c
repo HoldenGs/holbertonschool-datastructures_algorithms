@@ -15,6 +15,8 @@ size_t depth_first_traverse(const graph_t *graph,
 	size_t depth = 0, i;
 	visited_type_t *visited;
 
+	if (graph == NULL || action == NULL)
+		return (0);
 	/* Initialize visited array to 0's */
 	visited = malloc(sizeof(visited_type_t) * graph->nb_vertices);
 	for (i = 0; i < graph->nb_vertices; i++)
@@ -46,11 +48,11 @@ size_t depth_first_traverse_r(vertex_t *vertex,
 	size_t next_depth, deepest_depth;
 
 	next_depth = deepest_depth = 0;
-	if (visited[vertex->index] == GREY || visited[vertex->index] == BLACK)
+	if (visited[vertex->index] == BLACK)
 		return (0);
 
 	action(vertex, depth);
-	visited[vertex->index] = GREY;
+	visited[vertex->index] = BLACK;
 	for (next_edge = vertex->edges; next_edge; next_edge = next_edge->next)
 	{
 		next_depth = depth_first_traverse_r(
