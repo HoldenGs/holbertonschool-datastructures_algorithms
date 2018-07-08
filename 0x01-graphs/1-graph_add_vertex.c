@@ -14,6 +14,8 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 	vertex_t *vertex, *next_vertex;
 
 	/* Create vertex */
+	if (graph == NULL || str == NULL)
+		return (NULL);
 	vertex = malloc(sizeof(vertex_t));
 	if (vertex == NULL)
 		return (NULL);
