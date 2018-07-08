@@ -26,7 +26,6 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 	vertex->edges = NULL;
 	vertex->next = NULL;
 	vertex->index = 0;
-	graph->nb_vertices++;
 
 	/* Insert vertex */
 	if (graph->vertices == NULL)
@@ -44,5 +43,7 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 		}
 		next_vertex->next = vertex;
 	}
+	graph->nb_vertices++;
+
 	return (vertex);
 }
