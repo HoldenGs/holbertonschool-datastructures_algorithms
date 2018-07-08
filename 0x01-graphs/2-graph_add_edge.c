@@ -16,6 +16,8 @@ int graph_add_edge(graph_t *graph, const char *src, const char *dest,
 	vertex_t *vertex_1, *vertex_2;
 	int ret = 0;
 
+	if (graph == NULL || src == NULL || dest == NULL)
+		return (NULL);
 	/* Find vertices */
 	vertex_1 = find_vertex(graph, src);
 	vertex_2 = find_vertex(graph, dest);
