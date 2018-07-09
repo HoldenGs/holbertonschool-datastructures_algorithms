@@ -37,7 +37,10 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 		while (next_vertex->next != NULL)
 		{
 			if (!strcmp(next_vertex->content, str))
+			{
+				free(vertex);
 				return (NULL);
+			}
 			next_vertex = next_vertex->next;
 			vertex->index++;
 		}
