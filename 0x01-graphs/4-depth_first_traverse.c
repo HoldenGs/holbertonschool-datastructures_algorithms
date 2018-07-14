@@ -41,9 +41,8 @@ size_t depth_first_traverse(const graph_t *graph,
  *
  * Return: The maximum depth reached by the traversal
  */
-size_t depth_first_traverse_r(vertex_t *vertex,
-	void (*action)(const vertex_t *v, size_t depth),
-	visited_type_t visited[], size_t depth)
+size_t depth_first_traverse_r(vertex_t *vertex, void (*action)
+	(const vertex_t *v, size_t depth), visited_type_t visited[], size_t depth)
 {
 	edge_t *next_edge;
 	size_t next_depth, deepest_depth;
