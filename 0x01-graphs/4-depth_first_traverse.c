@@ -26,6 +26,7 @@ size_t depth_first_traverse(const graph_t *graph,
 		return (depth);
 
 	depth = depth_first_traverse_r(graph->vertices, action, visited, 0);
+	free(visited);
 
 	return (depth);
 }
@@ -48,7 +49,7 @@ size_t depth_first_traverse_r(vertex_t *vertex,
 	size_t next_depth, deepest_depth;
 
 	next_depth = deepest_depth = 0;
-	if (visited[vertex->index] == BLACK)
+	if (vertex == NULL || visited[vertex->index] == BLACK)
 		return (0);
 
 	action(vertex, depth);
