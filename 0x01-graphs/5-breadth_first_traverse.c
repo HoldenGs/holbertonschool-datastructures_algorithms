@@ -26,11 +26,10 @@ size_t breadth_first_traverse(const graph_t *graph,
 	visited = malloc(sizeof(visited_type_t) * graph->nb_vertices);
 	for (i = 0; i < graph->nb_vertices; i++)
 		visited[i] = WHITE;
-	if (graph->vertices == NULL)
-		return (depth);
 
-	if (push(&queue, graph->vertices, depth) == NULL)
-		return (0);
+	if (graph->vertices == NULL ||
+		push(&queue, graph->vertices, depth) == NULL)
+		return (depth);
 	while ((v_and_d = pop(&queue)))
 	{
 		vertex = v_and_d->vertex;
@@ -39,14 +38,17 @@ size_t breadth_first_traverse(const graph_t *graph,
 		if (new_depth > depth)
 			depth = new_depth;
 
-		if (visited[vertex->index] == WHITE)
-			action(vertex, depth);
-		visited[vertex->index] = BLACK;
-		for (edge = vertex->edges; edge != NULL; edge = edge->next)
+		if (vertex)
 		{
-			if (visited[edge->dest->index] == WHITE)
-				if (push(&queue, edge->dest, new_depth + 1) == NULL)
-					return (0);
+			if (visited[vertex->index] == WHITE)
+				action(vertex, depth);
+			visited[vertex->index] = BLACK;
+			for (edge = vertex->edges; edge != NULL; edge = edge->next)
+			{
+				if (edge->dest && visited[edge->dest->index] == WHITE)
+					if (push(&queue, edge->dest, new_depth + 1) == NULL)
+						return (0);
+			}
 		}
 	}
 	free(visited);
