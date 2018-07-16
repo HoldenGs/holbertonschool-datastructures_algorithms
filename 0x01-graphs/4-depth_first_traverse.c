@@ -23,7 +23,10 @@ size_t depth_first_traverse(const graph_t *graph,
 		visited[i] = WHITE;
 
 	if (graph->vertices == NULL)
+	{
+		free(visited);
 		return (depth);
+	}		
 
 	depth = depth_first_traverse_r(graph->vertices, action, visited, 0);
 	free(visited);
