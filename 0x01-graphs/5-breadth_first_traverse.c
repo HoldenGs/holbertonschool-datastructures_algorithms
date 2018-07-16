@@ -13,9 +13,12 @@
 size_t breadth_first_traverse(const graph_t *graph,
 	void (*action)(const vertex_t *v, size_t depth))
 {
-	size_t depth = 0, i, new_depth; vlist_t *v_and_d;
-	visited_type_t *visited; vertex_t *vertex;
-	queue_t queue = {NULL, NULL}; edge_t *edge;
+	size_t depth = 0, i, new_depth;
+	vlist_t *v_and_d;
+	visited_type_t *visited;
+	vertex_t *vertex;
+	queue_t queue = {NULL, NULL};
+	edge_t *edge;
 
 	if (graph == NULL || action == NULL)
 		return (0);
@@ -34,7 +37,7 @@ size_t breadth_first_traverse(const graph_t *graph,
 		vertex = v_and_d->vertex;
 		new_depth = v_and_d->depth;
 		free(v_and_d);
-		if (new_depth > depth)
+		if (new_depth > depth && visited[vertex->index] == WHITE)
 			depth = new_depth;
 		if (vertex)
 		{
