@@ -1,5 +1,6 @@
 #include "graphs.h"
 #include <string.h>
+#include <stdio.h>
 
 /**
  * graph_add_vertex - add a vertex with @str data to the @graph
@@ -38,11 +39,18 @@ vertex_t *graph_add_vertex(graph_t *graph, const char *str)
 		{
 			if (!strcmp(next_vertex->content, str))
 			{
+				free(vertex->content);
 				free(vertex);
 				return (NULL);
 			}
 			next_vertex = next_vertex->next;
 			vertex->index++;
+		}
+		if (!strcmp(next_vertex->content, str))
+		{
+			free(vertex->content);
+			free(vertex);
+			return (NULL);
 		}
 		next_vertex->next = vertex;
 	}
